@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jun 13 14:20:11 2021
+
+@author: Abderrahmane Herbadji
+"""
+
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+img_rgb = cv2.imread('images/Algerian_team.jpg')
+img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+template = cv2.imread('images/Algerian_template.PNG',0)
+h, w = template.shape[::]
+
+
+results = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+
+threshold = 0.54 
+loc = np.where( results >= threshold)  
+
+for pt in zip(*loc[::-1]):   
+    
+    cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 1)  
+
+cv2.imshow("Results", img_rgb)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
